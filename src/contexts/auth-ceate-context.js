@@ -143,7 +143,11 @@ function AuthProvider({ children }) {
     callback();
   };
 
-  //   const resetPassword = (email) => console.log(email);
+  const resetPassword = async (data, callback) => {
+    //!-------------------------------------------------------
+    console.log(data);
+    callback();
+  };
 
   return (
     <AuthContext.Provider
@@ -153,7 +157,7 @@ function AuthProvider({ children }) {
         signUp,
         signIn,
         signOut,
-        // resetPassword,
+        resetPassword,
       }}
     >
       {children}

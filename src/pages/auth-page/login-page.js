@@ -1,7 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import AuthUseContext from "../../hooks/auth-use-context";
-import { DASHBOARD_PAGE } from "../../utils/constants/router-constants";
+import {
+  DASHBOARD_PAGE,
+  FORGOT_PASSWORD_PAGE,
+} from "../../utils/constants/router-constants";
 
 const LoginPage = () => {
   const { signUp } = AuthUseContext();
@@ -32,6 +35,14 @@ const LoginPage = () => {
 
         <button type="submit">Login</button>
       </form>
+
+      <button
+        onClick={() => {
+          navigate(FORGOT_PASSWORD_PAGE.path, { replace: true });
+        }}
+      >
+        Forgot Password
+      </button>
     </div>
   );
 };
