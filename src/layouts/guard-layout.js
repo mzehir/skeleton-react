@@ -5,7 +5,7 @@ import Sidebar from "../components/navigation/sidebar";
 const GuardLayout = ({ children }) => {
   return (
     <>
-      <h5>GuardLayout</h5>
+      <h3>GuardLayout</h3>
       <Sidebar />
       {children}
       <Outlet />

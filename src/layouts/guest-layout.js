@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 const GuestLayout = ({ children }) => {
   return (
     <>
-      <h5>GuestLayout</h5>
+      <h3>GuestLayout</h3>
       {children}
       <Outlet />
     </>
