@@ -95,30 +95,6 @@ function AuthProvider({ children }) {
   //     initialize();
   //   }, []);
 
-    const signIn = async (data, callback) => {
-      // const response = await axios.post("/api/auth/sign-in", {
-      //   email,
-      //   password,
-      // });
-      // const { accessToken, user } = response.data;
-
-      // setSession(accessToken);
-      // dispatch({
-      //   type: SIGN_IN,
-      //   payload: {
-      //     user,
-      //   },
-      // });
-      //!-------------------------------------------------------
-      console.log(data);
-      callback();
-    };
-
-    // const signOut = async () => {
-    //   setSession(null);
-    //   dispatch({ type: SIGN_OUT });
-    // };
-
   const signUp = async (data, callback) => {
     // const response = await axios.post("/api/auth/sign-up", {
     //   email,
@@ -140,6 +116,33 @@ function AuthProvider({ children }) {
     callback();
   };
 
+  const signIn = async (data, callback) => {
+    // const response = await axios.post("/api/auth/sign-in", {
+    //   email,
+    //   password,
+    // });
+    // const { accessToken, user } = response.data;
+
+    // setSession(accessToken);
+    // dispatch({
+    //   type: SIGN_IN,
+    //   payload: {
+    //     user,
+    //   },
+    // });
+    //!-------------------------------------------------------
+    console.log(data);
+    callback();
+  };
+
+  const signOut = async (callback) => {
+    // setSession(null);
+    // dispatch({ type: SIGN_OUT });
+    //!-------------------------------------------------------
+    console.log("signOut");
+    callback();
+  };
+
   //   const resetPassword = (email) => console.log(email);
 
   return (
@@ -149,7 +152,7 @@ function AuthProvider({ children }) {
         method: "jwt",
         signUp,
         signIn,
-        // signOut,
+        signOut,
         // resetPassword,
       }}
     >
