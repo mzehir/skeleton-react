@@ -1,8 +1,6 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useReducer, useEffect } from "react";
 import ApiUseContext from "../hooks/api-use-context";
-import axios from "../utils/axios";
 import { isValidToken, setSession } from "../utils/jwt";
-import { API_PATH } from "../utils/constants/api-path-constans";
 
 const INITIALIZE = "INITIALIZE";
 const SIGN_IN = "SIGN_IN";
@@ -51,106 +49,96 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(JWTReducer, initialState);
-  const { postData, loading } = ApiUseContext();
+  const { APIPath, postData, loading } = ApiUseContext();
 
-  debugger
+  useEffect(() => {
+    const initialize = async () => {
+      try {
+        const accessToken = window.localStorage.getItem("accessToken");
 
-  //   useEffect(() => {
-  //     // const initialize = async () => {
-  //     //   try {
-  //     //     const accessToken = window.localStorage.getItem("accessToken");
+        if (accessToken && isValidToken(accessToken)) {
+          setSession(accessToken);
 
-  //     //     if (accessToken && isValidToken(accessToken)) {
-  //     //       setSession(accessToken);
+          dispatch({
+            type: INITIALIZE,
+            payload: {
+              isAuthenticated: true,
+              // user
+              //! user bilgileri lazım
+            },
+          });
+        } else {
+          dispatch({
+            type: INITIALIZE,
+            payload: {
+              isAuthenticated: false,
+              user: null,
+            },
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        dispatch({
+          type: INITIALIZE,
+          payload: {
+            isAuthenticated: false,
+            user: null,
+          },
+        });
+      }
+    };
 
-  //     //       const response = await axios.get("/api/auth/my-account");
-  //     //       const { user } = response.data;
+    initialize();
+  }, []);
 
-  //     //       console.log(user);
+  const signUp = async (data, callback = () => {}) => {
+    const response = await postData(APIPath.SIGN_UP, {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    });
 
-  //     //       dispatch({
-  //     //         type: INITIALIZE,
-  //     //         payload: {
-  //     //           isAuthenticated: true,
-  //     //           user,
-  //     //         },
-  //     //       });
-  //     //     } else {
-  //     //       dispatch({
-  //     //         type: INITIALIZE,
-  //     //         payload: {
-  //     //           isAuthenticated: false,
-  //     //           user: null,
-  //     //         },
-  //     //       });
-  //     //     }
-  //     //   } catch (err) {
-  //     //     console.error(err);
-  //     //     dispatch({
-  //     //       type: INITIALIZE,
-  //     //       payload: {
-  //     //         isAuthenticated: false,
-  //     //         user: null,
-  //     //       },
-  //     //     });
-  //     //   }
-  //     // };
-
-  //     initialize();
-  //   }, []);
-
-  const signUp = async (data, callback) => {
-    // const response = await axios.post("/api/auth/sign-up", {
-    //   email,
-    //   password,
-    //   firstName,
-    //   lastName,
-    // });
-    // const { accessToken, user } = response.data;
-
-    // window.localStorage.setItem("accessToken", accessToken);
-    // dispatch({
-    //   type: SIGN_UP,
-    //   payload: {
-    //     user,
-    //   },
-    // });
-    //!-------------------------------------------------------
-    console.log(data);
-    callback();
+    if (response.isSuccess) {
+      return callback();
+    }
   };
 
-  const signIn = async (data, callback) => {
-    // const response = await axios.post("/api/auth/sign-in", {
-    //   email,
-    //   password,
-    // });
-    // const { accessToken, user } = response.data;
+  const signIn = async (data, callback = () => {}) => {
+    const response = await postData(APIPath.SIGN_IN, {
+      email: data.email,
+      password: data.password,
+    });
 
-    // setSession(accessToken);
-    // dispatch({
-    //   type: SIGN_IN,
-    //   payload: {
-    //     user,
-    //   },
-    // });
-    //!-------------------------------------------------------
-    console.log(data);
-    callback();
+    if (response.isSuccess) {
+      const { accessToken, user } = response.data;
+      setSession(accessToken);
+
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          user,
+        },
+      });
+
+      return callback();
+    }
   };
 
   const signOut = async (callback) => {
-    // setSession(null);
-    // dispatch({ type: SIGN_OUT });
-    //!-------------------------------------------------------
-    console.log("signOut");
+    setSession(null);
+    dispatch({ type: SIGN_OUT });
     callback();
   };
 
   const resetPassword = async (data, callback) => {
-    //!-------------------------------------------------------
-    console.log(data);
-    callback();
+    const response = await postData(APIPath.RESET_PASSWORD, {
+      email: data.email,
+      username: data.username,
+    });
+
+    if (response.isSuccess) {
+      return callback();
+    }
   };
 
   return (

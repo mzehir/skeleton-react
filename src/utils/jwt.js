@@ -1,5 +1,4 @@
 import jwtDecode from "jwt-decode";
-// import { verify, sign } from "jsonwebtoken";
 import axios from "./axios";
 
 const isValidToken = (accessToken) => {
@@ -29,6 +28,8 @@ const setSession = (accessToken) => {
     localStorage.setItem("accessToken", accessToken);
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
     // This function below will handle when token is expired
+    // Aşağıdaki bu işlev, belirtecin süresi dolduğunda işleyecektir
+
     // const { exp } = jwtDecode(accessToken);
     // handleTokenExpired(exp);
   } else {
@@ -38,3 +39,5 @@ const setSession = (accessToken) => {
 };
 
 export { isValidToken, setSession };
+
+//? sessionStorage, localStorage, cookies araştırılacak.

@@ -7,7 +7,7 @@ import {
 } from "../../utils/constants/router-constants";
 
 const LoginPage = () => {
-  const { signUp } = AuthUseContext();
+  const { signIn } = AuthUseContext();
   const navigate = useNavigate();
 
   const onSubmit = (e) => {
@@ -18,7 +18,7 @@ const LoginPage = () => {
       password: e.target.password.value,
     };
 
-    signUp(data, () => {
+    signIn(data, () => {
       navigate(DASHBOARD_PAGE.path, { replace: true });
     });
   };
