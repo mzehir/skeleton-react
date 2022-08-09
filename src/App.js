@@ -1,12 +1,15 @@
 import React from "react";
 import { Router } from "./router/router";
-import { AuthProvider } from "./contexts/auth-ceate-context";
+import { ApiProvider } from "./contexts/api-create-context";
+import { AuthProvider } from "./contexts/auth-create-context";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router />
-    </AuthProvider>
+    <ApiProvider>
+      <AuthProvider>
+        <Router />
+      </AuthProvider>
+    </ApiProvider>
   );
 }
 

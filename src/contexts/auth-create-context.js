@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
-
+import ApiUseContext from "../hooks/api-use-context";
 import axios from "../utils/axios";
 import { isValidToken, setSession } from "../utils/jwt";
 import { API_PATH } from "../utils/constants/api-path-constans";
@@ -51,6 +51,9 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(JWTReducer, initialState);
+  const { postData, loading } = ApiUseContext();
+
+  debugger
 
   //   useEffect(() => {
   //     // const initialize = async () => {
