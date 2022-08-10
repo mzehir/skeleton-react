@@ -131,7 +131,6 @@ function AuthProvider({ children }) {
   };
 
   const resetPassword = async (data, callback) => {
-    debugger
     const response = await postData(APIPath.RESET_PASSWORD, {
       email: data.email,
     });
