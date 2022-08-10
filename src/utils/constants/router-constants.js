@@ -43,6 +43,15 @@ export const VERIFY_ACCOUNT_PAGE = {
   items: false,
 };
 
+export const VERIFY_PASSWORD_PAGE = {
+  path: "/verify-password",
+  label: "router.verifyPassword",
+  icon: null,
+  // visibleTypes: [], //? => Burası tüm routeleri bir araya getiren method yazıldığında doldurulacak.
+  // navVisibleTypes: [], //? => Burası tüm routeleri bir araya getiren method yazıldığında doldurulacak.
+  items: false,
+};
+
 //!
 
 export const DASHBOARD_PAGE = {

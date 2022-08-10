@@ -49,7 +49,7 @@ const AuthContext = createContext(null);
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(JWTReducer, initialState);
-  const { APIPath, postData, loading } = ApiUseContext();
+  const { APIPath, postData } = ApiUseContext();
 
   useEffect(() => {
     const initialize = async () => {
@@ -131,9 +131,9 @@ function AuthProvider({ children }) {
   };
 
   const resetPassword = async (data, callback) => {
+    debugger
     const response = await postData(APIPath.RESET_PASSWORD, {
       email: data.email,
-      username: data.username,
     });
 
     if (response.isSuccess) {
