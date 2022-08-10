@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import AuthUseContext from "../../hooks/auth-use-context";
 
 const ForgotPasswordPage = () => {

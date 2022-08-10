@@ -1,11 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import AuthUseContext from "../../hooks/auth-use-context";
-import {LOGIN_PAGE} from "../../utils/constants/router-constants"
 
 const RegisterPage = () => {
   const { signUp } = AuthUseContext();
-  const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -17,7 +14,8 @@ const RegisterPage = () => {
     };
 
     signUp(data, () => {
-      navigate(LOGIN_PAGE.path, { replace: true });
+      alert("Click on the account verification link sent to your mailbox.");
+
     });
   };
   return (
