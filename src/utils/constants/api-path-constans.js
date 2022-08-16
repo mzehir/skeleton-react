@@ -1,10 +1,10 @@
 export const API_PATH = {
   // Auth
-  SIGN_UP: "signUp",
-  VERIFY_EMAIL: "verifyEmail",
-  SIGN_IN: "signIn",
-  EXTEND_SESSION: "extendSession",
-  SIGN_OUT: "signOut",
-  RESET_PASSWORD: "resetPassword",
-  VERIFY_RESET_PASSWORD: "verifyResetPassword",
+  SIGN_UP: "users/signUp",
+  VERIFY_EMAIL: "users/verifyEmail",
+  SIGN_IN: "users/signIn",
+  EXTEND_SESSION: "users/extendSession",
+  SIGN_OUT: "users/signOut",
+  RESET_PASSWORD: "users/resetPassword",
+  VERIFY_RESET_PASSWORD: "users/verifyResetPassword",
 };

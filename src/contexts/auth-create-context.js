@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import ApiUseContext from "../hooks/api-use-context";
 import { isValidToken, setSession } from "../utils/jwt";
 
@@ -93,7 +93,8 @@ function AuthProvider({ children }) {
 
   const signUp = async (data, callback = () => {}) => {
     const response = await postData(APIPath.SIGN_UP, {
-      username: data.username,
+      name: data.name,
+      surname: data.surname,
       email: data.email,
       password: data.password,
     });

@@ -8,14 +8,14 @@ const RegisterPage = () => {
     e.preventDefault();
 
     let data = {
-      username: e.target.username.value,
+      name: e.target.name.value,
+      surname: e.target.surname.value,
       email: e.target.email.value,
       password: e.target.password.value,
     };
 
     signUp(data, () => {
       alert("Click on the account verification link sent to your mailbox.");
-
     });
   };
   return (
@@ -23,13 +23,16 @@ const RegisterPage = () => {
       <h5>Register Page</h5>
       <form onSubmit={onSubmit}>
         <p>
-          Username: <input type="text" name="username" />
+          Name: <input type="text" name="name" />
+        </p>
+        <p>
+          Surname: <input type="text" name="surname" />
         </p>
         <p>
           Email: <input type="email" name="email" />
         </p>
         <p>
-          Password <input type="password" name="password" />
+          Password <input type="text" name="password" />
         </p>
 
         <button type="submit">Register</button>
