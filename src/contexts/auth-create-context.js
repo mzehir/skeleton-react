@@ -99,7 +99,7 @@ function AuthProvider({ children }) {
       password: data.password,
     });
 
-    if (response.isSuccess) {
+    if (response?.isSuccess) {
       return callback();
     }
   };
@@ -110,7 +110,7 @@ function AuthProvider({ children }) {
       password: data.password,
     });
 
-    if (response.isSuccess) {
+    if (response?.isSuccess) {
       const { accessToken, user } = response.data;
       setSession(accessToken);
 
@@ -136,7 +136,7 @@ function AuthProvider({ children }) {
       email: data.email,
     });
 
-    if (response.isSuccess) {
+    if (response?.isSuccess) {
       return callback();
     }
   };
