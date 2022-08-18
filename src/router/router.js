@@ -6,6 +6,7 @@ import {
   FORGOT_PASSWORD_PAGE,
   VERIFY_ACCOUNT_PAGE,
   VERIFY_PASSWORD_PAGE,
+  TWO_FACTOR_LOGIN_PAGE,
   DASHBOARD_PAGE,
   GUEST_PAGE,
   ONE_PAGE,
@@ -23,6 +24,8 @@ import LoginPage from "../pages/auth-page/login-page";
 import ForgotPasswordPage from "../pages/auth-page/forgot-password-page";
 import VerifyAccountPage from "../pages/auth-page/redirected-pages/verify-account-page";
 import VerifyPasswordPage from "../pages/auth-page/redirected-pages/verify-password-page";
+import TwoFactorLoginPage from "../pages/auth-page/redirected-pages/two-factor-login-page";
+
 import NoMatchPage from "../pages/no-match-page/no-match-page";
 
 import GuestPage from "../pages/guest-page/guest-page";
@@ -77,6 +80,15 @@ export const Router = () => {
         element={
           <AuthLayout>
             <VerifyPasswordPage />
+          </AuthLayout>
+        }
+      />
+
+      <Route
+        path={TWO_FACTOR_LOGIN_PAGE.path}
+        element={
+          <AuthLayout>
+            <TwoFactorLoginPage />
           </AuthLayout>
         }
       />

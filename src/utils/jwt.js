@@ -8,33 +8,30 @@ const isValidToken = (accessToken) => {
   const decoded = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
 
-  return decoded.exp > currentTime;
+  return {
+    isValid: decoded.exp > currentTime,
+    remainingSessionTime: decoded.exp - currentTime,
+  };
 };
 
-//  const handleTokenExpired = (exp) => {
-//   let expiredTimer;
-
-//   window.clearTimeout(expiredTimer);
-//   const currentTime = Date.now();
-//   const timeLeft = exp * 1000 - currentTime;
-//   console.log(timeLeft);
-//   expiredTimer = window.setTimeout(() => {
-//     console.log('expired');
-//   }, timeLeft);
-// };
-
-const setSession = (accessToken) => {
+const setSession = (accessToken, bypassVerifyToken) => {
   if (accessToken) {
     localStorage.setItem("accessToken", accessToken);
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-    // This function below will handle when token is expired
-    // Aşağıdaki bu işlev, belirtecin süresi dolduğunda işleyecektir
 
-    // const { exp } = jwtDecode(accessToken);
-    // handleTokenExpired(exp);
+    let validToken = isValidToken(accessToken);
+    if (validToken.isValid) {
+      sessionStorage.setItem("remainingSessionTime",validToken.remainingSessionTime)
+    }
   } else {
     localStorage.removeItem("accessToken");
     delete axios.defaults.headers.common.Authorization;
+  }
+
+  if (bypassVerifyToken) {
+    sessionStorage.setItem("bypassVerifyToken", bypassVerifyToken);
+  } else {
+    sessionStorage.removeItem("bypassVerifyToken");
   }
 };
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthUseContext from "../../hooks/auth-use-context";
 import {
   DASHBOARD_PAGE,
+  TWO_FACTOR_LOGIN_PAGE,
   FORGOT_PASSWORD_PAGE,
 } from "../../utils/constants/router-constants";
 
@@ -16,10 +17,17 @@ const LoginPage = () => {
     let data = {
       email: e.target.email.value,
       password: e.target.password.value,
+      rememberMe:false
     };
 
-    signIn(data, () => {
-      navigate(DASHBOARD_PAGE.path, { replace: true });
+    signIn(data, (verifySignInToken) => {
+      if (verifySignInToken) {
+        navigate(TWO_FACTOR_LOGIN_PAGE.path + "?token=" + verifySignInToken, {
+          replace: true,
+        });
+      } else {
+        navigate(DASHBOARD_PAGE.path, { replace: true });
+      }
     });
   };
   return (

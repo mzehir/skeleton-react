@@ -52,6 +52,15 @@ export const VERIFY_PASSWORD_PAGE = {
   items: false,
 };
 
+export const TWO_FACTOR_LOGIN_PAGE = {
+  path: "/two-factor-login",
+  label: "router.twoFactorLogin",
+  icon: null,
+  // visibleTypes: [], //? => Burası tüm routeleri bir araya getiren method yazıldığında doldurulacak.
+  // navVisibleTypes: [], //? => Burası tüm routeleri bir araya getiren method yazıldığında doldurulacak.
+  items: false,
+};
+
 //!
 
 export const DASHBOARD_PAGE = {

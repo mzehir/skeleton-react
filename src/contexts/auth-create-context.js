@@ -104,23 +104,54 @@ function AuthProvider({ children }) {
     }
   };
 
-  const signIn = async (data, callback = () => {}) => {
-    const response = await postData(APIPath.SIGN_IN, {
-      email: data.email,
-      password: data.password,
-    });
+  const signIn = async (values, callback = () => {}) => {
+    let bypassVerifyToken = sessionStorage.getItem("bypassVerifyToken");
+    let data = {
+      email: values.email,
+      password: values.password,
+      rememberMe: values.rememberMe,
+    };
 
-    if (response?.isSuccess) {
-      const { accessToken, user } = response.data;
-      setSession(accessToken);
+    if (bypassVerifyToken) {
+      data.bypassVerifyToken = bypassVerifyToken;
+    }
+
+    const response = await postData(APIPath.SIGN_IN, data);
+
+    if (response) {
+      if (response.data.token) {
+        // two-factor-login-page sayfasına token ile...
+        return callback(response.data.token);
+      } else {
+        setSession(response.data.accessToken, response.data.bypassVerifyToken);
+        dispatch({
+          type: SIGN_IN,
+          payload: {
+            user: response.data.user,
+          },
+        });
+        return callback();
+      }
+    }
+  };
+
+  const verifySignIn = async (values, callback = () => {}) => {
+    let data = {
+      verificationCode: values.verificationCode,
+      token: values.token,
+    };
+    const response = await postData(APIPath.VERIFY_SIGN_IN, data);
+
+    if (response) {
+      setSession(response.data.accessToken, response.data.bypassVerifyToken);
 
       dispatch({
+        // Burada kaldım
         type: SIGN_IN,
         payload: {
-          user,
+          user: response.data.user,
         },
       });
-
       return callback();
     }
   };
@@ -148,6 +179,7 @@ function AuthProvider({ children }) {
         method: "jwt",
         signUp,
         signIn,
+        verifySignIn,
         signOut,
         resetPassword,
       }}
