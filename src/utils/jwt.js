@@ -8,23 +8,25 @@ const isValidToken = (accessToken) => {
   const decoded = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
 
-  return {
-    isValid: decoded.exp > currentTime,
-    remainingSessionTime: decoded.exp - currentTime,
-  };
+  return decoded.exp > currentTime;
 };
 
 const setSession = (accessToken, bypassVerifyToken) => {
   if (accessToken) {
-    localStorage.setItem("accessToken", accessToken);
+    // localStorage.setItem("accessToken", accessToken);
+    // sessionStorage.setItem("accessToken", accessToken); // Bunun silinmesi yada yukarıdaki satırın silinmesi muhtemel.
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-    let validToken = isValidToken(accessToken);
-    if (validToken.isValid) {
-      sessionStorage.setItem("remainingSessionTime",validToken.remainingSessionTime)
-    }
+    // const decoded = jwtDecode(accessToken);
+    // if (decoded.isDeferrable) {
+    //   sessionStorage.setItem(
+    //     "remainingSessionTime",
+    //     decoded.exp - Date.now() / 1000
+    //   );
+    // }
   } else {
-    localStorage.removeItem("accessToken");
+    // localStorage.removeItem("accessToken");
+    // sessionStorage.removeItem("accessToken"); // Bunun silinmesi yada yukarıdaki satırın silinmesi muhtemel.
     delete axios.defaults.headers.common.Authorization;
   }
 
@@ -36,5 +38,3 @@ const setSession = (accessToken, bypassVerifyToken) => {
 };
 
 export { isValidToken, setSession };
-
-//? sessionStorage, localStorage, cookies araştırılacak.

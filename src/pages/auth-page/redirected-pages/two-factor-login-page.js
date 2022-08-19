@@ -26,6 +26,24 @@ const TwoFactorLoginPage = () => {
     }
   };
 
+  const setLocalStroge = () => {
+    let obj = {
+      name: "ahmet",
+      surname: "turgut",
+      email: "deneme@gmail.com",
+      accessToken: "asdpkoasdapksdasd5874da9s6d4as8d",
+    };
+
+    localStorage.setItem("aft5454@gmail.com-userSetting", JSON.stringify(obj));
+  };
+
+  const getLocalStroge = () => {
+    let userData = JSON.parse(
+      localStorage.getItem("aft5454@gmail.com-userSetting")
+    );
+    debugger;
+  };
+
   return (
     <div>
       <h5>Two Factor Login Page</h5>
@@ -36,6 +54,22 @@ const TwoFactorLoginPage = () => {
 
         <button type="submit">Login</button>
       </form>
+
+      <button
+        onClick={() => {
+          setLocalStroge();
+        }}
+      >
+        setLocalStroge
+      </button>
+
+      <button
+        onClick={() => {
+          getLocalStroge();
+        }}
+      >
+        getLocalStroge
+      </button>
     </div>
   );
 };

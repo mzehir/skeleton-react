@@ -10,7 +10,9 @@ const SIGN_UP = "SIGN_UP";
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null,
+  name: null,
+  surname: null,
+  email: null,
 };
 
 const JWTReducer = (state, action) => {
@@ -19,25 +21,29 @@ const JWTReducer = (state, action) => {
       return {
         isAuthenticated: action.payload.isAuthenticated,
         isInitialized: true,
-        user: action.payload.user,
+        name: action.payload.name,
+        surname: action.payload.surname,
+        email: action.payload.email,
       };
     case SIGN_IN:
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
+        name: action.payload.name,
+        surname: action.payload.surname,
+        email: action.payload.email,
       };
     case SIGN_OUT:
       return {
         ...state,
         isAuthenticated: false,
-        user: null,
+        name: null,
+        surname: null,
+        email: null,
       };
     case SIGN_UP:
       return {
         ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
       };
 
     default:
@@ -54,17 +60,20 @@ function AuthProvider({ children }) {
   useEffect(() => {
     const initialize = async () => {
       try {
-        const accessToken = window.localStorage.getItem("accessToken");
+        let userInformation = getUserInformation();
+        const accessToken = userInformation.accessToken;
+        // const accessToken = window.localStorage.getItem("accessToken");
 
         if (accessToken && isValidToken(accessToken)) {
-          setSession(accessToken);
+          // setSession(accessToken);
 
           dispatch({
             type: INITIALIZE,
             payload: {
               isAuthenticated: true,
-              // user
-              //! user bilgileri lazım
+              name: userInformation.name,
+              surname: userInformation.surname,
+              email: userInformation.email,
             },
           });
         } else {
@@ -72,7 +81,9 @@ function AuthProvider({ children }) {
             type: INITIALIZE,
             payload: {
               isAuthenticated: false,
-              user: null,
+              name: null,
+              surname: null,
+              email: null,
             },
           });
         }
@@ -82,7 +93,9 @@ function AuthProvider({ children }) {
           type: INITIALIZE,
           payload: {
             isAuthenticated: false,
-            user: null,
+            name: null,
+            surname: null,
+            email: null,
           },
         });
       }
@@ -123,11 +136,15 @@ function AuthProvider({ children }) {
         // two-factor-login-page sayfasına token ile...
         return callback(response.data.token);
       } else {
+        let userInformation = response.data.authendicatedUser;
         setSession(response.data.accessToken, response.data.bypassVerifyToken);
+        setUserInformation(userInformation, response.data.accessToken);
         dispatch({
           type: SIGN_IN,
           payload: {
-            user: response.data.user,
+            name: userInformation.name,
+            surname: userInformation.surname,
+            email: userInformation.email,
           },
         });
         return callback();
@@ -143,13 +160,15 @@ function AuthProvider({ children }) {
     const response = await postData(APIPath.VERIFY_SIGN_IN, data);
 
     if (response) {
+      let userInformation = response.data.authendicatedUser;
       setSession(response.data.accessToken, response.data.bypassVerifyToken);
-
+      setUserInformation(userInformation, response.data.accessToken);
       dispatch({
-        // Burada kaldım
         type: SIGN_IN,
         payload: {
-          user: response.data.user,
+          name: userInformation.name,
+          surname: userInformation.surname,
+          email: userInformation.email,
         },
       });
       return callback();
@@ -158,6 +177,7 @@ function AuthProvider({ children }) {
 
   const signOut = async (callback) => {
     setSession(null);
+    clearUserInformation();
     dispatch({ type: SIGN_OUT });
     callback();
   };
@@ -170,6 +190,46 @@ function AuthProvider({ children }) {
     if (response?.isSuccess) {
       return callback();
     }
+  };
+
+  const setUserInformation = (userInformation, accessToken) => {
+    let localStorageData = {
+      name: userInformation.name,
+      surname: userInformation.surname,
+      email: userInformation.email,
+      accessToken: accessToken,
+    };
+
+    let localStorageKey = `userInformation-${userInformation.email}`;
+    localStorage.setItem(localStorageKey, JSON.stringify(localStorageData));
+    localStorage.setItem("lastLoggedInUserEmail", userInformation.email);
+    sessionStorage.setItem("currentUserEmail", userInformation.email);
+  };
+
+  const getUserInformation = () => {
+    let currentUserEmail = sessionStorage.getItem("currentUserEmail");
+    if (currentUserEmail) {
+      // Sayfayı yenilediyse burası
+      let userInformation = JSON.parse(
+        localStorage.getItem(`userInformation-${currentUserEmail}`)
+      );
+      return userInformation;
+    } else {
+      // Pencereyi kapatıp sonra tekrar açtıysa burası
+      let lastLoggedInUserEmail = localStorage.getItem("lastLoggedInUserEmail");
+      let userInformation = JSON.parse(
+        localStorage.getItem(`userInformation-${lastLoggedInUserEmail}`)
+      );
+      sessionStorage.setItem("currentUserEmail", userInformation.email);
+      return userInformation;
+    }
+  };
+
+  const clearUserInformation = () => {
+    let currentUserEmail = sessionStorage.getItem("currentUserEmail");
+    localStorage.removeItem(`userInformation-${currentUserEmail}`);
+    localStorage.removeItem("lastLoggedInUserEmail");
+    sessionStorage.removeItem("currentUserEmail");
   };
 
   return (
@@ -190,3 +250,11 @@ function AuthProvider({ children }) {
 }
 
 export { AuthContext, AuthProvider };
+
+// Kullanıcı login olursa
+
+// Kullanıcı login durumunda sayfayı yenilerse
+
+// Kullanıcı logout olma isteği yaparsa (client)
+
+// Kullanıcı pencereyi kapatıp tekrar açarsa ??
